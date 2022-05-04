@@ -1,0 +1,132 @@
+[[tests]]
+name = "k6 test - error console"
+
+# Inputs
+[[tests.inputs]]
+insert_at = "log_parse_k6" # required
+type = "raw" # required
+value = '''time="2022-02-02T13:02:57+03:00" level=error msg=my_error source=console'''
+
+# Outputs
+[[tests.outputs]]
+extract_from = "log_parse_k6"
+[[tests.outputs.conditions]]
+type = "vrl"
+source = '''
+    assert!(!exists(.timestamp), "no timestamp provided")
+    assert!(exists(.group), "no group provided")
+    assert!(exists(.inst), "no inst provided")
+
+    message_field_valid = exists(.message) &&
+      !is_nullish(.message) &&
+      is_string(.message) &&
+      length!(.message) == 8
+    assert!(message_field_valid)
+
+    assert_eq!(.env, "test")
+    assert_eq!(.source_type, "console")
+    assert_eq!(.group, "performance")
+    assert_eq!(.level, "ERROR")
+    assert_eq!(.gun, "k6")
+'''
+
+[[tests]]
+name = "k6 test - info console"
+
+# Inputs
+[[tests.inputs]]
+insert_at = "log_parse_k6"
+type = "raw"
+value = '''time="2022-02-02T13:02:57+03:00" level=info msg="my log" source=console'''
+
+# Outputs
+[[tests.outputs]]
+extract_from = "log_parse_k6"
+[[tests.outputs.conditions]]
+type = "vrl"
+source = '''
+    assert!(!exists(.timestamp), "no timestamp provided")
+    assert!(exists(.group), "no group provided")
+    assert!(exists(.inst), "no inst provided")
+
+    message_field_valid = exists(.message) &&
+      !is_nullish(.message) &&
+      is_string(.message) &&
+      length!(.message) == 6
+    assert!(message_field_valid)
+
+    assert_eq!(.env, "test")
+    assert_eq!(.source_type, "console")
+    assert_eq!(.group, "performance")
+    assert_eq!(.level, "ERROR")
+    assert_eq!(.gun, "k6")
+'''
+
+[[tests]]
+name = "k6 test - check"
+
+# Inputs
+[[tests.inputs]]
+insert_at = "log_parse_k6"
+type = "raw"
+value = '''time="2022-02-02T13:02:58+03:00" level=error check="Is stylesheet 4859 bytes?" group="::json-checker" method="POST" name="http://httpbin.org/post" scenario="default" status="200" url="http://httpbin.org/post"'''
+
+# Outputs
+[[tests.outputs]]
+extract_from = "log_parse_k6"
+[[tests.outputs.conditions]]
+type = "vrl"
+source = '''
+    assert!(!exists(.timestamp), "no timestamp provided")
+    assert!(exists(.group), "no group provided")
+    assert!(exists(.inst), "no inst provided")
+
+    message_field_valid = exists(.message) &&
+      !is_nullish(.message) &&
+      is_string(.message) &&
+      length!(.message) == 25
+    assert!(message_field_valid)
+
+    assert!(exists(.method), "no method provided")
+    assert!(exists(.name), "no name provided")
+    assert!(exists(.group_scenario), "no group_scenario provided")
+
+    assert_eq!(.env, "test")
+    assert_eq!(.source_type, "check")
+    assert_eq!(.group, "performance")
+    assert_eq!(.level, "ERROR")
+    assert_eq!(.gun, "k6")
+'''
+
+[[tests]]
+name = "k6 test - check error"
+
+# Inputs
+[[tests.inputs]]
+insert_at = "log_parse_k6"
+type = "raw"
+value = '''time="2022-02-02T13:02:58+03:00" level=error msg="cannot parse json due to an error at line 1, character 2 , error: invalid character '<' looking for beginning of value\n\tat reflect.methodValueCall (native)\n\tat is verb correct (file:///Users/xk6-output-error/example.js:76:38(3))\n\tat go.k6.io/k6/js/modules/k6.(*K6).Check-fm (native)\n\tat file:///Users/xk6-output-error/example.js:74:19(22)\n\tat go.k6.io/k6/js/modules/k6.(*K6).Group-fm (native)\n\tat file:///Users/xk6-output-error/example.js:71:4(40)\n\tat native\n" executor=ramping-vus scenario=default source=stacktrace'''
+
+# Outputs
+[[tests.outputs]]
+extract_from = "log_parse_k6"
+[[tests.outputs.conditions]]
+type = "vrl"
+source = '''
+    assert!(!exists(.timestamp), "no timestamp provided")
+    assert!(exists(.group), "no group provided")
+    assert!(exists(.inst), "no inst provided")
+
+    message_field_valid = exists(.message) &&
+      !is_nullish(.message) &&
+      is_string(.message) &&
+      length!(.message) == 474
+    assert!(message_field_valid)
+
+    assert!(exists(.group_scenario), "no group_scenario provided")
+
+    assert_eq!(.env, "test")
+    assert_eq!(.group, "performance")
+    assert_eq!(.level, "ERROR")
+    assert_eq!(.gun, "k6")
+'''
