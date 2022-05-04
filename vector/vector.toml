@@ -1,0 +1,59 @@
+#                                    __   __  __
+#                                    \ \ / / / /
+#                                     \ V / / /
+#                                      \_/  \/
+#
+#                                    V E C T O R
+#                                   Configuration
+#
+# ------------------------------------------------------------------------------
+# Website: https://vector.dev
+# Docs: https://vector.dev/docs/
+# ------------------------------------------------------------------------------
+
+# Note: A full config spec is located at ./vector.spec.toml and examples
+#       in the ./examples folder.
+
+data_dir = "/var/lib/vector"
+
+[sources.file_source_k6]
+type = "file"
+include = ["/xk6-output-error/test.log"]
+
+[transforms.log_parse_k6]
+inputs = [ "file_source_k6"]
+type = "remap"
+source = '''
+    structured =
+	    parse_regex(.message, r'"(?P<time>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2})"\s+level=(?P<level>[a-zA-Z-]+)\s+msg="(?P<msg>.+?)"\s+executor=(?P<executor>.+?)\s+scenario=(?P<scenario>.+?)\s+source=(?P<source>\w+)') ??
+        parse_key_value!(.message)
+    . = merge(., structured)
+    .@timestamp = del(.time)
+  	del(.timestamp)
+    del(.message)
+
+    .message, err = .msg + .check
+    if err != null {
+        .message = .msg
+    }
+    del(.msg)
+    del(.check)
+
+    if .source == null {
+        .source = "check"
+    }
+    .source_type = del(.source)
+    .group_scenario = (.group)
+    .level = "ERROR"
+    .env = "test"
+    .group = "performance"
+    .inst = "RUNNER1111"
+    .gun = "k6"
+'''
+
+[sinks.my_sink_id]
+type = "file"
+inputs = [ "log_parse_k6"]
+compression = "none"
+encoding = "ndjson"
+path = "/Users/xk6-output-error/vector-%Y-%m-%d-%s.log"
