@@ -1,11 +1,11 @@
 package pkg
 
 import (
+	"go.k6.io/k6/metrics"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"go.k6.io/k6/stats"
 	"go.uber.org/zap"
 )
 
@@ -13,7 +13,7 @@ func TestCreateString(t *testing.T) {
 	logger := zap.NewNop().Sugar()
 
 	type inputStruct struct {
-		sample   stats.Sample
+		sample   metrics.Sample
 		mapField map[string]string
 	}
 
@@ -27,18 +27,18 @@ func TestCreateString(t *testing.T) {
 		"myTag_2": "myTag_2",
 	}
 
-	sampleFields := stats.Sample{
-		Metric: &stats.Metric{
+	sampleFields := metrics.Sample{
+		Metric: &metrics.Metric{
 			Name:       "checks",
 			Type:       0,
 			Contains:   0,
-			Thresholds: stats.Thresholds{},
+			Thresholds: metrics.Thresholds{},
 			Submetrics: nil,
-			Sub:        stats.Submetric{},
+			Sub:        &metrics.Submetric{},
 			Sink:       nil,
 		},
 		Time: time.Time{},
-		Tags: stats.IntoSampleTags(&map[string]string{
+		Tags: metrics.IntoSampleTags(&map[string]string{
 			"name":       "http://httpbin.org/1delete1?verb=delete",
 			"scenario":   "default",
 			"status":     "404",
@@ -54,11 +54,11 @@ func TestCreateString(t *testing.T) {
 
 	var tests = []testPair{
 		{
-			input:  inputStruct{stats.Sample{}, map[string]string{}},
+			input:  inputStruct{metrics.Sample{}, map[string]string{}},
 			output: "time=\"0001-01-01T00:00:00Z\" level=error  source=\"xk6-output-error\"\n",
 		},
 		{
-			input:  inputStruct{stats.Sample{}, testMapFields},
+			input:  inputStruct{metrics.Sample{}, testMapFields},
 			output: "time=\"0001-01-01T00:00:00Z\" level=error myTag_1=\"myTag_1\" myTag_2=\"myTag_2\" source=\"xk6-output-error\"\n",
 		},
 
@@ -82,7 +82,7 @@ func TestFlushStdErr(t *testing.T) {
 	logger := zap.NewNop().Sugar()
 
 	type testPair struct {
-		sample   stats.Sample
+		sample   metrics.Sample
 		mapField map[string]string
 	}
 
@@ -91,18 +91,18 @@ func TestFlushStdErr(t *testing.T) {
 		"myTag_2": "myTag_2",
 	}
 
-	sampleFields := stats.Sample{
-		Metric: &stats.Metric{
+	sampleFields := metrics.Sample{
+		Metric: &metrics.Metric{
 			Name:       "checks",
 			Type:       0,
 			Contains:   0,
-			Thresholds: stats.Thresholds{},
+			Thresholds: metrics.Thresholds{},
 			Submetrics: nil,
-			Sub:        stats.Submetric{},
+			Sub:        &metrics.Submetric{},
 			Sink:       nil,
 		},
 		Time: time.Time{},
-		Tags: stats.IntoSampleTags(&map[string]string{
+		Tags: metrics.IntoSampleTags(&map[string]string{
 			"name":       "http://httpbin.org/1delete1?verb=delete",
 			"scenario":   "default",
 			"status":     "404",
@@ -116,18 +116,18 @@ func TestFlushStdErr(t *testing.T) {
 		Value: 0,
 	}
 
-	sampleFieldsErr := stats.Sample{
-		Metric: &stats.Metric{
+	sampleFieldsErr := metrics.Sample{
+		Metric: &metrics.Metric{
 			Name:       "myV",
 			Type:       0,
 			Contains:   0,
-			Thresholds: stats.Thresholds{},
+			Thresholds: metrics.Thresholds{},
 			Submetrics: nil,
-			Sub:        stats.Submetric{},
+			Sub:        &metrics.Submetric{},
 			Sink:       nil,
 		},
 		Time:  time.Time{},
-		Tags:  stats.IntoSampleTags(&map[string]string{}),
+		Tags:  metrics.IntoSampleTags(&map[string]string{}),
 		Value: 0,
 	}
 
