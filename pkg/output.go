@@ -2,13 +2,13 @@ package pkg
 
 import (
 	"fmt"
+	"go.k6.io/k6/metrics"
 	"os"
 	"sort"
 	"strings"
 	"time"
 
 	"go.k6.io/k6/output"
-	"go.k6.io/k6/stats"
 	"go.uber.org/zap"
 )
 
@@ -98,7 +98,7 @@ func (o *Output) flushMetrics() {
 	}
 }
 
-func flushStdErr(sample stats.Sample, mapFields map[string]string, log *zap.SugaredLogger) error {
+func flushStdErr(sample metrics.Sample, mapFields map[string]string, log *zap.SugaredLogger) error {
 	if (sample.Metric.Name == "checks" && sample.Value != 1) ||
 		(sample.Metric.Name == "http_reqs" && sample.Metric.Tainted.Bool) {
 		log.Debugw("StdErr logs", "time", sample.Time, "params", mapFields, "tags", sample.Tags)
@@ -108,7 +108,7 @@ func flushStdErr(sample stats.Sample, mapFields map[string]string, log *zap.Suga
 	return nil
 }
 
-func createString(t time.Time, mapFields map[string]string, tags *stats.SampleTags, log *zap.SugaredLogger) string {
+func createString(t time.Time, mapFields map[string]string, tags *metrics.SampleTags, log *zap.SugaredLogger) string {
 	// 	add	check and extra tags
 	for key, value := range tags.CloneTags() {
 		mapFields[key] = value
