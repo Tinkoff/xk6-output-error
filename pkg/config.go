@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 
@@ -67,9 +66,6 @@ func parseEnv(prefix string) (Config, error) {
 	cfg := Config{}
 	if fields, exist := os.LookupEnv(prefix); exist {
 		cfg.Fields = strings.Split(fields, ",")
-		if len(cfg.Fields) < 1 {
-			return cfg, fmt.Errorf("could not parse env fields")
-		}
 	}
 	return cfg, nil
 }
@@ -83,9 +79,6 @@ func parseJSON(data json.RawMessage) (Config, error) {
 func parseFieldsArg(arg string) (Config, error) {
 	cfg := Config{}
 	fields := strings.Split(strings.TrimPrefix(arg, "fields="), ",")
-	if len(fields) < 1 {
-		return cfg, fmt.Errorf("could not parse arguments fields")
-	}
 	cfg.Fields = append(cfg.Fields, fields...)
 
 	return cfg, nil
