@@ -1,11 +1,11 @@
 package pkg
 
 import (
-	"go.k6.io/k6/metrics"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"go.k6.io/k6/metrics"
 	"go.uber.org/zap"
 )
 

@@ -26,14 +26,14 @@ go install go.k6.io/xk6/cmd/xk6@latest
 
   ```shell
 CGO_ENABLED=1
-xk6 build --with github.com/tinkoff/xk6-output-error@latest
+xk6 build --with github.com/Tinkoff/xk6-output-error@latest
   ```
 
 If you use Windows:
 
 ```shell
 set CGO_ENABLED=1
-xk6 build master --with github.com/tinkoff/xk6-output-error
+xk6 build master --with github.com/Tinkoff/xk6-output-error
 ```
 
 ## Usage

@@ -1,7 +1,7 @@
 package xk6outputerror
 
 import (
-	"github.com/tinkoff/xk6-output-error/pkg"
+	"github.com/Tinkoff/xk6-output-error/pkg"
 	"go.k6.io/k6/output"
 )
 

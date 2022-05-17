@@ -2,12 +2,12 @@ package pkg
 
 import (
 	"fmt"
-	"go.k6.io/k6/metrics"
 	"os"
 	"sort"
 	"strings"
 	"time"
 
+	"go.k6.io/k6/metrics"
 	"go.k6.io/k6/output"
 	"go.uber.org/zap"
 )
@@ -121,11 +121,11 @@ func createString(t time.Time, mapFields map[string]string, tags *metrics.Sample
 	sort.Strings(keys)
 	log.Debugw("Create keys list", "keys", keys)
 	// create msg
-	var msg string
+	var msg strings.Builder
 	for _, k := range keys {
-		msg += fmt.Sprintf(" %s=%q", k, mapFields[k])
+		_, _ = fmt.Fprintf(&msg, " %s=%q", k, mapFields[k])
 	}
-	out := fmt.Sprintf("time=%q level=error %s source=%q\n", t.Format(time.RFC3339), strings.TrimSpace(msg), NameOutput)
+	out := fmt.Sprintf("time=%q level=error %s source=%q\n", t.Format(time.RFC3339), strings.TrimSpace(msg.String()), NameOutput)
 	log.Debugw("Create stdError string", "outString", out)
 	return out
 }
