@@ -11,6 +11,7 @@ import (
 
 func TestCreateString(t *testing.T) {
 	logger := zap.NewNop().Sugar()
+	r := metrics.NewRegistry().RootTagSet()
 
 	type inputStruct struct {
 		sample   metrics.Sample
@@ -28,37 +29,39 @@ func TestCreateString(t *testing.T) {
 	}
 
 	sampleFields := metrics.Sample{
-		Metric: &metrics.Metric{
-			Name:       "checks",
-			Type:       0,
-			Contains:   0,
-			Thresholds: metrics.Thresholds{},
-			Submetrics: nil,
-			Sub:        &metrics.Submetric{},
-			Sink:       nil,
+		TimeSeries: metrics.TimeSeries{
+			Metric: &metrics.Metric{
+				Name:       "checks",
+				Type:       0,
+				Contains:   0,
+				Thresholds: metrics.Thresholds{},
+				Submetrics: nil,
+				Sub:        &metrics.Submetric{},
+				Sink:       nil,
+			},
+			Tags: metrics.NewRegistry().RootTagSet().WithTagsFromMap(map[string]string{
+				"name":       "http://httpbin.org/1delete1?verb=delete",
+				"scenario":   "default",
+				"status":     "404",
+				"myTag":      "myTag2",
+				"url":        "http://tets.ru",
+				"check":      "is verb correct",
+				"error_code": "1404",
+				"group":      "::DELETE-2",
+				"method":     "DELETE",
+			}),
 		},
-		Time: time.Time{},
-		Tags: metrics.IntoSampleTags(&map[string]string{
-			"name":       "http://httpbin.org/1delete1?verb=delete",
-			"scenario":   "default",
-			"status":     "404",
-			"myTag":      "myTag2",
-			"url":        "http://tets.ru",
-			"check":      "is verb correct",
-			"error_code": "1404",
-			"group":      "::DELETE-2",
-			"method":     "DELETE",
-		}),
+		Time:  time.Time{},
 		Value: 0,
 	}
 
 	var tests = []testPair{
 		{
-			input:  inputStruct{metrics.Sample{}, map[string]string{}},
+			input:  inputStruct{metrics.Sample{TimeSeries: metrics.TimeSeries{Tags: r}}, map[string]string{}},
 			output: "time=\"0001-01-01T00:00:00Z\" level=error  source=\"xk6-output-error\"\n",
 		},
 		{
-			input:  inputStruct{metrics.Sample{}, testMapFields},
+			input:  inputStruct{metrics.Sample{TimeSeries: metrics.TimeSeries{Tags: r}}, testMapFields},
 			output: "time=\"0001-01-01T00:00:00Z\" level=error myTag_1=\"myTag_1\" myTag_2=\"myTag_2\" source=\"xk6-output-error\"\n",
 		},
 
@@ -92,42 +95,46 @@ func TestFlushStdErr(t *testing.T) {
 	}
 
 	sampleFields := metrics.Sample{
-		Metric: &metrics.Metric{
-			Name:       "checks",
-			Type:       0,
-			Contains:   0,
-			Thresholds: metrics.Thresholds{},
-			Submetrics: nil,
-			Sub:        &metrics.Submetric{},
-			Sink:       nil,
+		TimeSeries: metrics.TimeSeries{
+			Metric: &metrics.Metric{
+				Name:       "checks",
+				Type:       0,
+				Contains:   0,
+				Thresholds: metrics.Thresholds{},
+				Submetrics: nil,
+				Sub:        &metrics.Submetric{},
+				Sink:       nil,
+			},
+			Tags: metrics.NewRegistry().RootTagSet().WithTagsFromMap(map[string]string{
+				"name":       "http://httpbin.org/1delete1?verb=delete",
+				"scenario":   "default",
+				"status":     "404",
+				"myTag":      "myTag2",
+				"url":        "http://tets.ru",
+				"check":      "is verb correct",
+				"error_code": "1404",
+				"group":      "::DELETE-2",
+				"method":     "DELETE",
+			}),
 		},
-		Time: time.Time{},
-		Tags: metrics.IntoSampleTags(&map[string]string{
-			"name":       "http://httpbin.org/1delete1?verb=delete",
-			"scenario":   "default",
-			"status":     "404",
-			"myTag":      "myTag2",
-			"url":        "http://tets.ru",
-			"check":      "is verb correct",
-			"error_code": "1404",
-			"group":      "::DELETE-2",
-			"method":     "DELETE",
-		}),
+		Time:  time.Time{},
 		Value: 0,
 	}
 
 	sampleFieldsErr := metrics.Sample{
-		Metric: &metrics.Metric{
-			Name:       "myV",
-			Type:       0,
-			Contains:   0,
-			Thresholds: metrics.Thresholds{},
-			Submetrics: nil,
-			Sub:        &metrics.Submetric{},
-			Sink:       nil,
+		TimeSeries: metrics.TimeSeries{
+			Metric: &metrics.Metric{
+				Name:       "myV",
+				Type:       0,
+				Contains:   0,
+				Thresholds: metrics.Thresholds{},
+				Submetrics: nil,
+				Sub:        &metrics.Submetric{},
+				Sink:       nil,
+			},
+			Tags: metrics.NewRegistry().RootTagSet().WithTagsFromMap(map[string]string{}),
 		},
 		Time:  time.Time{},
-		Tags:  metrics.IntoSampleTags(&map[string]string{}),
 		Value: 0,
 	}
 

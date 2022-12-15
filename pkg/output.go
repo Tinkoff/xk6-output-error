@@ -108,9 +108,9 @@ func flushStdErr(sample metrics.Sample, mapFields map[string]string, log *zap.Su
 	return nil
 }
 
-func createString(t time.Time, mapFields map[string]string, tags *metrics.SampleTags, log *zap.SugaredLogger) string {
+func createString(t time.Time, mapFields map[string]string, tags *metrics.TagSet, log *zap.SugaredLogger) string {
 	// 	add	check and extra tags
-	for key, value := range tags.CloneTags() {
+	for key, value := range tags.Map() {
 		mapFields[key] = value
 	}
 	// create sort list
