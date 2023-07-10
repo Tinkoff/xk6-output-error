@@ -3,7 +3,7 @@ module github.com/Tinkoff/xk6-output-error
 go 1.19
 
 require (
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.4
 	go.k6.io/k6 v0.44.1
 	go.uber.org/zap v1.24.0
 	gopkg.in/guregu/null.v4 v4.0.0
