@@ -105,7 +105,7 @@ name = "k6 test - check error"
 [[tests.inputs]]
 insert_at = "log_parse_k6"
 type = "raw"
-value = '''time="2022-02-02T13:02:58+03:00" level=error msg="cannot parse json due to an error at line 1, character 2 , error: invalid character '<' looking for beginning of value\n\tat reflect.methodValueCall (native)\n\tat is verb correct (file:///Users/xk6-output-error/example.js:76:38(3))\n\tat go.k6.io/k6/js/modules/k6.(*K6).Check-fm (native)\n\tat file:///Users/xk6-output-error/example.js:74:19(22)\n\tat go.k6.io/k6/js/modules/k6.(*K6).Group-fm (native)\n\tat file:///Users/xk6-output-error/example.js:71:4(40)\n\tat native\n" executor=ramping-vus scenario=default source=stacktrace'''
+value = '''time="2022-02-02T13:02:58+03:00" level=error msg="cannot parse json due to an error at line 1, character 2 , error: invalid character '<' looking for beginning of value\n\tat reflect.methodValueCall (native)\n\tat is verb correct (file:///Users/xk6-output-error/sample.js:76:38(3))\n\tat go.k6.io/k6/js/modules/k6.(*K6).Check-fm (native)\n\tat file:///Users/xk6-output-error/sample.js:74:19(22)\n\tat go.k6.io/k6/js/modules/k6.(*K6).Group-fm (native)\n\tat file:///Users/xk6-output-error/sample.js:71:4(40)\n\tat native\n" executor=ramping-vus scenario=default source=stacktrace'''
 
 # Outputs
 [[tests.outputs]]
