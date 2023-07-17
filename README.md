@@ -1,7 +1,7 @@
 # xk6-output-error
 
 This is a [k6](https://go.k6.io/k6) extension using the [xk6](https://github.com/grafana/xk6) system.
-`xk6-output-error` is a k6 extension to add more information into StdErr k6. Moreover, you can send logs with errors in your Elasticsearch or other log storage system used for this vector.dev, filebeat, etc. 
+`xk6-output-error` is a k6 extension to add more information into StdErr k6. Moreover, you can send logs with errors in your Elasticsearch or other log storage system used for this [vector.dev](https://vector.dev/) ([config vector](./examples/vector)), filebeat, etc. 
 
 ## Contents
 * [Build](#build)
@@ -41,24 +41,24 @@ xk6 build master --with github.com/Tinkoff/xk6-output-error
 You can use default params:
 
 ```shell
-k6 run -o xk6-output-error example.js
+k6 run -o xk6-output-error sample.js
 ```
 
 Also, you can add special fields for output:
 
 ```shell
-k6 run -o xk6-output-error=fields="proto,tls_version" example.js
+k6 run -o xk6-output-error=fields="proto,tls_version" sample.js
 ```
 
 Or set an environment variable:
 
 ```shell
 export K6_OUTPUTERROR_FIELDS="proto,tls_version"
-k6 run -o xk6-output-error example.js
+k6 run -o xk6-output-error sample.js
 ```
 
 Moreover, you can set output into a file:
 
 ```shell
-k6 run -o xk6-output-error=fields="proto,tls_version" example.js 2>error.log
+k6 run -o xk6-output-error=fields="proto,tls_version" ./examples/sample.js 2>error.log
 ```

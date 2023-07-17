@@ -14,10 +14,8 @@ lint :
 tests :
 	go test -cover -race ./...
 
-check : ci-like-lint tests
-
 clean:
 	rm -f ./k6
 
-.PHONY: build clean format lint tests check
+.PHONY: build clean format lint tests
 
